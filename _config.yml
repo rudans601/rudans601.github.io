@@ -15,7 +15,7 @@
 minimal_mistakes_skin    : "dark" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale                   : "Republic of Korea"
+locale                   : "korea"
 title                    : "갱문의 코드노트"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
@@ -104,10 +104,10 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
+  name             : "갱문"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an **amazing** person."
-  location         : "Somewhere"
+  bio              : "나는 꾸준한 사람"
+  location         : "korea"
   email            :
   links:
     - label: "Email"
