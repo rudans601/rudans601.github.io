@@ -275,6 +275,9 @@ defaults:
       read_time: true
       share: true
       related: true
+      toc: true
+      toc_sticky: true
+      toc_label: 목차
   # _pages
   - scope:
       path: "_pages"

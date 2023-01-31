@@ -104,7 +104,7 @@ analytics:
 # Site Author
 author:
   name: "갱문"
-  avatar: # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar: "/images/갱문의 코드노트 블로그 로고1.png"
   bio: "갱문의 블로그 입니다"
   location: "South Korea"
   email:
@@ -263,5 +263,8 @@ defaults:
       share: true
       related: true
       show_date: true
+      toc: true
+      toc_sticky: true
+      toc_label: 목차
 
 date_format: "%Y-%m-%d"
