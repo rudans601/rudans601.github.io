@@ -1,10 +1,11 @@
 ---
 layout: single
-title: "C++ 자료구조"
-categories: codingtest_C++
-tags: [c++,codingtest]
+title: "C++/python 자료구조 01"
+categories: codingtest_C++/python
+tags: [c++,python,codingtjest]
 author_profile: false
 #search: false
 ---
 
-hi
+파이썬과 c++ 자료구조
+
