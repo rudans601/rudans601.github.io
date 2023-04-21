@@ -33,7 +33,7 @@ author_profile: false
 
 ### 사용 방법
 
-#### 리스트 선언
+#### 리스트 생성
 
 ```python
 a = list() #기본 선언방식
@@ -177,6 +177,113 @@ a[1:4:2] #세번째 파라미터는 몇 칸씩 건너뛸지 여부이다 -> [2,5
 #### 헤더
 
 일반적으로 각 컨테이너는 해당 타입과 같은 이름인 헤더 파일에 정의한다. deque는 deque 헤더, list는 list 헤더에 정의하는 식이다. 
+
+#### 순차 컨테이너 생성
+
+컨테이너종류 <타입> 이름 순으로 선언, 크기와 요소 값으로 초기화 할 수도 있다.
+
+```c++
+vector <const char*> articles = {"a", "an", "the"};
+list<string> authors = {"Milton","Shakespeare","Austen"};
+list<int> num; //빈 공간도 가능
+array<int,42> ia1 // int를 42개 담는 array, 기본 초기화
+//크기와 요소 초기값으로 초기화 할 수도 있다.
+vector<int> ivec(10,-1); //int 요소 10개, 각각은 -1로 초기화한다.
+forward_list<int> ivec(10); //int 요소 10개, 각각은 0으로 기본 초기화한다.
+```
+
+#### 반복자
+
+반복자는 순차, 연관 컨테이너 위치를 나타내는 변수의 일종이다.
+
+반복자는 const_iterator와 그냥 iterator가 있다. 컨테이너가 const이면 반복자도 const적용되고 const가 아니면 반복자의 const에 따른다
+
+```c++
+list<string> a = {"Milton","Shakespeare","Austen"};
+
+list<string>::iterator it5; //it5는 list<string>타입의 반복자이다.
+list<string>::iterator it6 = a.begin(); //list a의 시작점을 반환한다.
+auto it7 = a.cend(); //auto를 사용해도 된다
+```
+
+#### 대입/swap
+
+컨테이너의 종류와 요소 타입이 같으면 대입이 가능하다.
+
+```c++
+c1 = c2; //c1 내용을 c2 요소로 복사한다.
+list<string> list2 (authors); //authors는 list2와 컨테이너 종류와 요소 타입이 같다.
+```
+
+##### assign
+
+assign은 컨테이너의 두 요소의 타입이 달라도 변환이 가능하면 복사가 가능하다.
+
+```c++
+list<string> names;
+vector<const char*> oldstyle;
+names = oldstyle; //오류 : 컨테이너 타입이 일치하지 않는다
+names.assign(oldstyle.cbegin(), oldstyle.cend()); //타입이 변환 가능하므로 복사, 단 반복자 두개로 범위를 지정해야 함
+```
+
+
+
+swap는 두 컨테이너의 요소를 교체하는 것이다. 교체는 요소를 복사하는 것보다 훨씬 더 빠르다(상수 시간 보장)
+
+```c++
+vector<int> c1(10); //요소가 10개인 vector
+vector<int> c2(24); //요소가 24개인 vector
+swap(c1,c2); //이걸 주로 사용하는걸 추천
+c1.swap(c2); //이 방식도 가능
+```
+
+#### 크기/상등,관계연산자
+
+size( )함수는 요소의 개수를 반환한다.
+
+empty( )함수는 크기가 0이면 true, 크기가 1이면 false를 반환한다. forward_list에서는 지원하지 않는다
+
+Max_size는 해당 타입 컨테이너에서 담을 수 있는 요소 수보다 크거나 같은 수를 반환한다.
+
+```c++
+bool tof = c1.empty();
+```
+
+상등연산자(==, !=)와 관계연산자(>,<,>=,<=)도 지원한다. 단, 반드시 컨테이너 타입과 요소 타입이 같아야 한다. 그리고 클래스 객체가 요소인 경우 객체끼리 연산이 정의 돼있어야 가능하다.
+
+#### 요소 추가
+
+* push_back( )은 array와 forward_list를 제외한 모든 순차 컨테이너에서 끝에 요소를 추가한다. size가 1 증가한다.
+
+  ```c++
+  vector<string> container;
+  string word = "hi";
+  container.push_back(word);
+  ```
+
+* push_front( )는 list, forward_list,deque 컨테이너에서 처음에 새 요소를 추가한다.
+
+  ```c++
+  list<int> ilist; 
+    ilist.push_front("aa");
+  ```
+
+* insert( )는 원소 0개 이상을 컨테이너 내 어느 위치든 추가할 수 있다. 반복자로 나타내는 위치 앞에 요소를 삽입한다. vector, deque, list, string에서 지원하고 forward_list에서는 이 멤버의 특수화 버전을 제공한다. 
+
+  ```c++
+  slist.insert(iter, "Hello!"); //iter 바로 앞에 "Hello!"를 삽입한다.
+  slite.insert(iter,10,1); //반복자 iter앞에 값이 1인 요소를 10개 추가한다.
+  slite.insert(iter1,iter2,iter3); //반복자 iter1로 나타내는 요소 앞에 반복자 iter2와 iter3로 나타내는 범위의 요소를 참조하는 반복자를 반환한다.
+  slite.insert(iter,{0,1,2,3,4}); //iter 앞에 중괄호로 둘러싼 값을 삽입한다.
+  ```
+
+#### 요소 삭제
+
+
+
+#### 반복자 얻기
+
+
 
 # 딕셔너리(연관 컨테이너)
 
