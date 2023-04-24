@@ -268,28 +268,339 @@ bool tof = c1.empty();
     ilist.push_front("aa");
   ```
 
-* insert( )는 원소 0개 이상을 컨테이너 내 어느 위치든 추가할 수 있다. 반복자로 나타내는 위치 앞에 요소를 삽입한다. vector, deque, list, string에서 지원하고 forward_list에서는 이 멤버의 특수화 버전을 제공한다. 
+* insert( )는 원소 0개 이상을 컨테이너 내 어느 위치든 추가할 수 있다. 반복자로 나타내는 위치 앞에 요소를 삽입한다. vector, deque, list, string에서 지원하고 forward_list에서는 이 멤버의 특수화 버전을 제공한다. insert는 첫번째 반복자를 리턴한다.
 
   ```c++
   slist.insert(iter, "Hello!"); //iter 바로 앞에 "Hello!"를 삽입한다.
   slite.insert(iter,10,1); //반복자 iter앞에 값이 1인 요소를 10개 추가한다.
   slite.insert(iter1,iter2,iter3); //반복자 iter1로 나타내는 요소 앞에 반복자 iter2와 iter3로 나타내는 범위의 요소를 참조하는 반복자를 반환한다.
   slite.insert(iter,{0,1,2,3,4}); //iter 앞에 중괄호로 둘러싼 값을 삽입한다.
+  //반복자에 slite.begin() 등등을 넣어도 된다.
   ```
+
+* 클래스 객체 요소 추가 함수 (emplace_front, emplace, emplace_back)
+
+  ```c++
+  //인자가 3개인 Sales_data 클래스의 생성자를 사용해 c 끝에 Sales_data 객체 생성
+  c.emplace_back("978-0590353403", 25, 15.99);
+  //활용법
+  c.push_back(Sales_data("978-0590353403", 25, 15.99));
+  ```
+
+#### 요소 접근
+
+```c++
+//기존 방식 : 첨자 사용(string, vector, deque, array에만 유효)
+c[1];
+//반복자 방식 : 반복자에 역참조 연산자를 쓰면 반복자가 가리키고 있는 값을 반환한다.
+auto val = *c.begin(), val2 = c.front();
+auto last = c.end();
+auto val3 = *(--last); //가장 마지막 요소를 가져오려면 end()에서 반환한 반복자를 감소 후 역참조 해야 한다. *(--(c.end()))
+
+//요소 접근 후 변경할려면 auto만 선언하지 말고 auto 참조자로 선언 해야 한다
+auto &v = c.back();
+v = 1024;
+```
 
 #### 요소 삭제
 
+* pop_front( )
 
+  처음 요소를 제거한다.
 
-#### 반복자 얻기
+  ```c++
+  ilist.pop_front();
+  ```
 
+* pop_back( )
 
+  마지막 요소를 제거한다
+
+  ```c++
+  ilist.pop_back();
+  ```
+
+* erase( )
+
+  반복자로 지정한 요소 하나 또는 반복자 쌍으로 표시한 요소 범위를 제거할 수 있다. 제거 한 요소 바로 다음 위치를 참조하는 반복자를 반환한다.
+
+  ```c++
+  //하나씩 삭제
+  list<int> lst = {0,1,2,3,4,5,6,7,8,9};
+  auto it = lst.begin(); //시작 지점을 반복자로
+  while(it != lst.end())
+    if(*it % 2) //그 요소가 홀수이면
+      it = lst.erase(it); //이 요소를 삭제한다
+  	else
+      ++it; //반복자를 증가시킨다
+  
+  //여러개 삭제
+  elem1 = slist.erase(elem1, elem2); //elem1, elem2 둘 다 반복자
+  ```
+
+  
+
+* clear( )
+
+  컨테이너 내 모든 요소를 삭제한다
+
+#### 
+
+#### forward_list 연산
+
+forward_list에 있는 추가 연산자는 insert, emplace, erase를 사용하지 않는다. 대신 아래의 연산자를 사용한다. 
+
+* insert_after( )
+
+  반복자가 가리키는 요소 다음에 요소를 추가한다.
+
+  ```c++
+  forward_list<int> flst = {0,1,2,3,4,5,6,7,8,9};
+  auto prev = flst.before_begin(); //처음 요소보다 더 앞을 가리키는 반복자
+  flst.insert_after(prev,10); //제일 앞에 10을 추가한다.
+  
+  prev = flst.before_begin(); 
+  flst.insert_after(prev,5,10); //제일 앞에 10을 5개 추가
+  
+  prev = flst.before_begin(); 
+  flst.insert_after(prev,flst.begin(),flst.end()); //제일 처음부터 끝까지 복사 후 제일 앞에 추가
+  
+  prev = flst.before_begin(); 
+  flst.insert_after(prev,{11,12}); //제일 앞에 11, 12 추가
+  ```
+
+  
+
+* emplace_after( )
+
+  반복자가 가리키는 요소 다음에 요소를 생성한다. 새 요소에 대한 반복자를 반환한다.
+
+  ```c++
+  emplace_after(prev,Sales_data("a","b")); //Sales_data객체를 prev 바로 뒤에 객체를 추가한다.
+  ```
+
+  
+
+* erase_after( )
+
+  반복자가 가리키는 요소 다음 요소를 삭제한다.
+
+  ```c++
+  flst.erase_after(prev); //제일 앞의 요소 삭제
+  flst.erase-after(prev,flst.end()) //제일 앞부터 제일 뒤까지 요소 삭제
+  ```
+
+추가적인 연산자
+
+* Before_begin( ),cbefore_begin( )
+
+  목록 처음 요소 바로 앞의 존재하지 않는 요소를 나타내는 반복자. 이 반복자는 역참조하면 안된다. 반복자를 반환한다.
 
 # 딕셔너리(연관 컨테이너)
 
+## 딕셔너리 - 파이썬
+
+딕셔너리는 키/값 구조로 이루어진 컨테이너이다. 딕셔너리는 문자를 포함해 다양한 타입을 키로 사용할 수 있다. 숫자, 문자, 집합까지 가능하다.
+
+### 요약
+
+|      연산      | 시간복잡도 |                설명                 |
+| :------------: | :--------: | :---------------------------------: |
+|     len(a)     |    O(1)    |       요소의 개수를 리턴한다        |
+|     a[key]     |    O(1)    |     키를 조회하여 값을 리턴한다     |
+| a[key] = value |    O(1)    |          키/값을 삽입한다           |
+|    key in a    |    O(1)    | 딕셔너리에 키가 존재하는지 확인한다 |
+
+### 사용 방법
+
+#### 딕셔너리 선언
+
+```python
+a = dict() #기본적인 선언
+a = {} #더 간단하게 선언
+a = {'key' : 'value1', 'key2':'value2'}
+```
+
+#### 딕셔너리 찾기
+
+```python
+a['key1'] #value 출력
+a['key2'] = 'value3' #key2에 value3값 저장
+```
+
+존재하지 않는 키를 조회할 경우 KeyError가 발생한다.
+
+#### 딕셔너리 활용
+
+키/값은 for 반복문으로도 조회가 가능하다 item()메소드를 사용하면 된다
+
+```python
+for k,v in a.items():
+  print(k,v)
+```
+
+#### 딕셔너리 삭제
+
+딕셔너리 삭제는 del을 이용한다. 키값을 입력해야 한다.
+
+```python
+del a['key1']
+```
+
+### 딕셔너리 모듈(추가기능)
+
+* defaultdict 객체
+
+  존재하지 않는 키를 조회할 경우, 여러 메세지를 출력하는 대신 디폴트 값을 기준으로 해당 키에 대한 딕셔너리 아이템을 생성해준다
+
+  ```python
+  a = collections.defaultdict(int)
+  a['A'] = 5
+  a['B'] = 4 #a 딕셔너리에 'A'/5값과 'B'/4값 추가
+  ```
+
+* Counter 객체
+
+  아이템에 대한 개수를 계산해 딕셔너리로 리턴한다. 숫자가 키값이 되고 값은 개수로 만들어진다.
+
+  ```python
+  a = [1,2,3,4,5,5,5,6,6]
+  b = collections.Counter(a)
+  b # Counter({5:3, 6:2, 1:1, 2:1, 3:1, 4:1 })
+  ```
+
+  Counter 객체에서 빈도수가 가장 높은 요소는 most_common()을 사용하면 된다.
+
+  ```python
+  b.most_common(2) #[(5,3),(6,2)]
+  ```
+
+  
+
+* OrderedDict 객체
+
+파이썬 3.6 버전에서는 딕셔너리에 값을 차례대로 입력 해도 그 순서대로 저장된다는 보장이 없었다 그래서 orderedDict객체를 사용하면 입력 순서가 유지되는데 파이썬 3.7버전부터는 자체적으로 인덱슬르 이용하여 입력 순서가 유지되도록 개선됐다. 
+
+원래 해시테이블은 입력 순서에 관여하지 않는 자료형인 망큼, 무턱대고 딕셔너리로 입력 순서를 기대하는 것은 매우 위험하며 권장하지도 않는 방법이다.
+
+```python
+collections.OrderedDict({'banana' : 3, 'apple' : 4, 'pear' : 1, 'orange' : 2})
+```
 
 
 
+## 연관 컨테이너 - C++
+
+연관 컨테이너도 파이썬의 딕셔너리 처럼 키-값 쌍을 가지고 있다 연관 컨테이너는 map과 set이 있다. map에서 키는 색인 역할을 하고 값은 그 색인에 연관된 데이터를 나타내고, set은 키만 담는다. 그러므로 지정한 키가 존재하는지 여부를 조회할 경우에만 효율적이다.
+
+### 연관 컨테이너 종류
+
+(1)각 컨테이너는 set또는 map이고
+
+(2)키가 유일해야 하거나 다중 키를 허용하며 (multi)
+
+(3)요소는 순서대로 또는 순서 없이 저장한다.(unordered)
+
+map과 multimap은 map헤더에서 정의하고 set과 multiset타입은 set헤더에서 정의하며, 순서 없는 컨테이너는 unordered_map과 unordered_set 헤더에서 정의한다. 
+
+* 요소를 키 순서로 정렬
+
+  |   이름   |              설명               |
+  | :------: | :-----------------------------: |
+  |   map    | 연관 배열이며 키-값 쌍을 담는다 |
+  |   set    |       키가 값인 컨테이너        |
+  | multimap | 키가 여러번 나타날 수 있는 map  |
+  | multiset | 키가 여러번 나타날 수 있는 set  |
+
+* 키 순서 없음
+
+  |        이름        |                   설명                   |
+  | :----------------: | :--------------------------------------: |
+  |   unordered_map    |      해시 함수를 사용해 구성한 map       |
+  |   unordered_set    |      해시 함수를 사용해 구성한 set       |
+  | unordered_multimap | 해시 map이며 키는 여러 번 나타날 수 있다 |
+  | unordered_multiset | 해시 set이며 키는 여러번 나타날 수 있다  |
+
+#### 연관 컨테이너 정의
+
+* map
+
+  ```c++
+  map<string,size_t> word_count; //string을 size_t에 연관짓는 빈 map
+  map<string,string> authors = {{"Joyce", "James"}, {"Austen", "Jane"},{"Dickens","Charles"}};
+  string word;
+  while(cin >> word)
+    ++word_count[word]; //해당 단어에 대한 횟수를 가져와 증가 시킨다
+  
+  for( const auto &w : word_count)
+    cout << w.first << " occurs " << w.second << ((w.second > 1) ? "times" : "time") << endl; //w.first와 w.second는 pair타입의 키다. 이후 설명
+  ```
+
+* set
+
+  ```c++
+  //입력에서 각 단어가 나타내는 횟수를 센다
+  map<string, size_t> word_count;
+  set<string> exclude = {"The", "But", "And" , "Or", "An", "A", "the", "but", "and", "or", "an", "a"};
+  string word;
+  while(cin >> word)
+  {
+    if(exclude.find(word) == exclude.end()) //find는 반복자를 반환하는데 word 단어가 exclude에 있으면 그 반복자를 반환하고, 없으면 끝 지난 반복자를 반환한다.
+      ++word_count[word];
+  }
+  ```
+
+* multimap
+
+  ```c++
+  multimap<int,string> mmap(ivec.cbegin(),ivec.cend()); //mmap에 키값이 중복인 map 만들기
+  ```
+
+  
+
+* multiset
+
+  ```c++
+  multiset<int> mset(ivec.cbegin(),ivec.cend());
+  ```
+
+  
+
+#### pair타입
+
+연관 컨테이너에 사용하는 타입 중 하나로, pair는 두 데이터 멤버를 담는다. 두 타입은 같지 않아도 된다
+
+```c++
+pair<string, string> anon; //두 string을 담는다
+pair<string, vector<int>> line; //string과 vector<int>를 담는다
+pair<string, string> author = {"James","Joyce"}; //초기값 지정
+author.first; //James
+author.second //Joyce
+```
+
+##### pair 객체를 생성하는 함수
+
+```c++
+pair<string, int> process(vector<string> &v)
+{
+  if(v.empty())
+    return {v.back(), v.back().size()}; //목록 초기화
+  else
+    return pair<string, int>(); //반환 값을 명시적으로 생성한다.
+}
+//또는 두 인자를 사용해 적절한 타입의 pair를 새로 생성하도록 make_pair를 사용할 수 있다.
+if(v.empty())
+    return make_pair(v.back(), v.back().size()); //타입은 auto처럼 자동 추론
+```
 
 
 
+#### 연관 컨테이너 반복자
+
+#### 연관 컨테이너 요소 추가
+
+#### 연관 컨테이너 요소 삭제
+
+#### 연관 컨테이너 첨자 연산
+
+#### 순서 없는 연관 컨테이너
