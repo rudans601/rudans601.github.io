@@ -527,7 +527,7 @@ map과 multimap은 map헤더에서 정의하고 set과 multiset타입은 set헤�
 
   ```c++
   map<string,size_t> word_count; //string을 size_t에 연관짓는 빈 map
-  map<string,string> authors = {{"Joyce", "James"}, {"Austen", "Jane"},{"Dickens","Charles"}};
+  //map<string,string> authors = {{"Joyce", "James"}, {"Austen", "Jane"},{"Dickens","Charles"}};
   string word;
   while(cin >> word)
     ++word_count[word]; //해당 단어에 대한 횟수를 가져와 증가 시킨다
