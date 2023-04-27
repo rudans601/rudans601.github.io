@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "C++/python 자료구조 -리스트와 딕셔너리(순차 컨테이너와 연관 컨테이너)"
+title: "C++/python 자료구조 -리스트와 딕셔너리(순차 컨테이너와 연관 컨테이너),스택,큐,데크"
 categories: codingtest_C++/python
 tags: [c++,python,codingtjest]
 author_profile: false
@@ -654,3 +654,23 @@ word_count["Anna"] = 1;
 
 
 #### 순서 없는 연관 컨테이너
+
+# 데크
+
+## deque - 파이썬
+
+* append( )
+
+  마지막에 원소를 추가한다
+
+* appendleft( )
+
+  첫번째에 원소를 추가한다
+
+* pop( )
+
+  마지막 원소를 제거하고 그 값을 반환한다.
+
+* popleft( )
+
+  첫번째 원소를 제거하고 그 값을 반환한다.
