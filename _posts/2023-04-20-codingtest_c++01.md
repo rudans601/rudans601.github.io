@@ -655,6 +655,81 @@ word_count["Anna"] = 1;
 
 #### 순서 없는 연관 컨테이너
 
+# 스택
+
+## vector-c++
+
+스택은 후입 선출 스택은 보통 vector를 쓴다
+
+vector 라이브러리를 포함해야 한다
+
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+int main()
+{
+  vector<int> p; //빈 벡터 생성
+  vector<int> v = {12,23,34,45,56,67}; //벡터에 초기 값 설정 후 초기화
+  v.push_back(78); //78 요소를 뒤에다 추가 : 시간 복잡도 O(1)
+  for(int a:v) //범위 for나 일반 for 사용
+  {
+      cout << a << endl;
+  }
+  cout << "------" << endl;
+  v.pop_back(); //제일 뒤 요소 반환 후 삭제: 시간복잡도 O(1)
+  for(auto b = v.begin();b != v.end();b++) //일반 for는 반복자를 사용해도 됨
+  {
+      cout << *b << endl; //반복자를 역참조 해서 값 확인
+  }
+}
+```
+
+* push_back("값") : 제일 뒤에 원소 추가
+* pop_back() : 제일 뒤의 원소 제거
+* front( ) : 제일 앞의 원소 반환
+* back() : 제일 뒤의 원소 반환
+* reverse(n) : n개의 원소를 저장할 위치(공간)를 예약합니다
+* resize(n) : 크기를 n으로 변경한다
+* size() : 원소의 개수를 리턴한다
+* capacity() : 할당된 공간의 크기를 리턴한다
+
+# 큐
+
+## Queue - c++
+
+큐는 선입선출, queue를 사용한다
+
+queue 라이브러리를 포함해야 한다
+
+```c++
+#include <iostream>
+#include <queue>
+using namespace std;
+
+int main()
+{
+  queue<int> temp; //빈 큐 선언
+  temp.push(1); //큐에 원소 추가
+  temp.push(2);
+  temp.push(3);
+  
+  int k = temp.size();
+  for(int i = 0;i < k;i++)
+  {
+    cout << temp.front() << '\n'; //제일 앞의 원소를 반환
+    temp.pop(); //제일 앞 원소 삭제
+  }
+}
+```
+
+* push("값") : 큐에 원소를 추가
+* pop( ) : 제일 앞의 원소를 삭제
+* front( ) : 큐 제일 앞에 있는 원소를 반환
+* back() : 큐 제일 뒤에 있는 원소를 반환
+* empty( ) : 큐가 비어 있으면 true, 아니면 false를 반환
+* size( ) : 큐 사이즈를 반환
+
 # 데크
 
 ## deque - 파이썬
