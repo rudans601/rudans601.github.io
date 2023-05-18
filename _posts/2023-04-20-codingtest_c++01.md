@@ -732,6 +732,39 @@ int main()
 
 # 데크
 
+## deque - c++
+
+데크는 양쪽에서 끝나는 큐이다. 양쪽에서 삽입과 삭제가 가능하다
+
+```c++
+#include <iostream>
+#include <deque>
+using namespace std;
+
+int main()
+{
+  deque<int> dq;
+  
+  dq.push_back(4); //4추가
+}
+```
+
+* push_front("숫자") : 제일 앞에 '숫자'를 원소로 추가함
+
+* push_back("숫자") : 제일 뒤에 '숫자'를 원소로 추가함
+
+* pop_front( ) : 첫번째 원소를 제거함
+
+* pop_back( ) : 마지막 원소를 제거함
+
+* clear( ): 모든 원소 삭제
+
+* front( ) : 첫번째 원소 참조
+
+* back( ) : 마지막 원소 참조
+
+  
+
 ## deque - 파이썬
 
 * append( )
