@@ -782,3 +782,128 @@ int main()
 * popleft( )
 
   첫번째 원소를 제거하고 그 값을 반환한다.
+
+# 이진 트리
+
+## 이진트리 - c++ - map으로 구현
+
+선언
+
+```c++
+map<char, pair<char,char>> tree; //부모노드, 자식노드 2개로 구성
+```
+
+구현(원소 추가)
+
+```c++
+tree['A'] = make_pair('B','C'); //부모 A 노드 안에 자식노드 B,C추가
+tree['B'] = make_pair('.','.'); //부모 B 노드 안에 자식이 없으므로 .추가
+```
+
+이렇게 노드 개수만큼 Map에 저장하는 것을 반복해주면 이진트리가 완성된다
+
+출력
+
+```c++
+for( const auto &w : tree)
+        cout << w.first << w.second.first << w.second.second << endl; //부모노드, 자식노드1, 자식노드2 출력
+```
+
+노드를 수정하고 싶으면
+
+```c++
+tree['B'].first = 'D'; //부모 B노드의 첫번째 자식에 D를 추가 하고 싶으면 이렇게
+```
+
+노드를 map으로 추가했다가 삭제하고 싶으면 
+
+```c++
+tree.erase("B"); //부모 노드(key)가 B인 맵을 지운다.
+```
+
+A노드의 왼쪽 자식을 알고 싶으면
+
+```c++
+tree['A'].first;
+```
+
+오른쪽 자식을 알고 싶으면
+
+```c++
+tree['A'].second;
+```
+
+이렇게 해주면 된다
+
+
+
+전위순회, 중위순회, 후위순회 하는 방법
+
+```c++
+#include <iostream>
+#include <map>
+using namespace std;
+
+void preorder(map<char,pair<char, char>>& m,char node);
+void inorder(map<char,pair<char, char>>& m,char node);
+void postorder(map<char,pair<char, char>>& m,char node);
+int main()
+{
+    int N;
+    char pa, ch1, ch2, pa2;
+    map<char, pair<char, char>> tree;
+    cin >> N;
+    for(int i = 0;i < N;i++)
+    {
+        cin >> pa >> ch1 >> ch2;
+        tree[pa] = make_pair(ch1,ch2);
+        if(i == 0)
+            pa2 = pa;
+    }
+    
+    preorder(tree, pa2);
+    cout << endl;
+    inorder(tree, pa2);
+    cout << endl;
+    postorder(tree, pa2);
+    cout << endl;
+}
+
+void preorder(map<char,pair<char, char>>& m,char node) {
+    cout << node; 
+    if (m[node].first != '.')
+    {
+        preorder(m,m[node].first);
+    }
+    if (m[node].second != '.')
+    { 
+        preorder(m,m[node].second);
+    }
+}
+void inorder(map<char,pair<char, char>>& m,char node) {
+    if (m[node].first != '.')
+    { 
+        inorder(m,m[node].first);
+    }
+    cout << node; 
+    if (m[node].second != '.')
+    { 
+        inorder(m,m[node].second);
+    }
+}
+void postorder(map<char,pair<char, char>>& m,char node) {
+    if (m[node].first != '.')
+    { 
+        postorder(m,m[node].first);
+    }
+    if (m[node].second != '.')
+    { 
+        postorder(m,m[node].second);
+    }
+    cout << node;
+}
+```
+
+이진트리 삽입연산
+
+https://blockdmask.tistory.com/79
