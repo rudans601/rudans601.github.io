@@ -907,3 +907,225 @@ void postorder(map<char,pair<char, char>>& m,char node) {
 이진트리 삽입연산
 
 https://blockdmask.tistory.com/79
+
+## 이진트리
+
+```c++
+#include <iostream>
+
+struct Node
+{
+    int data;        //데이터
+    Node* left;        //왼쪽 자식노드
+    Node* right;        //오른쪽 자식노드
+};
+
+class BinaryTreeLinkedList
+{
+public:
+    BinaryTreeLinkedList();                //생성자
+    ~BinaryTreeLinkedList();            //소멸자
+    
+    Node* CreateNode();                //노드 생성
+    bool GetData(Node* node, int& data);        //값 반환
+    bool SetData(Node* node, int data);        //값 지정
+
+    bool GetLeftNode(Node* parent, Node** node);    //노드의 왼쪽 자식노드 반환
+    bool GetRightNode(Node* parent, Node** node);    //노드의 오른쪽 자식노드 반환
+
+    bool SetLeftNode(Node* parent, Node* child);    //노드의 왼쪽 자식노드 지정
+    bool SetRightNode(Node* parent, Node* child);    //노드의 오른쪽 자식노드 지정
+
+    void PreorderPrint(Node* node);            //전위 순회
+    void InorderPrint(Node* node);            //중위 순회
+    void PostorderPrint(Node* node);        //후위 순회
+
+    void RemoveNode(Node* node);            //노드 제거
+};
+
+BinaryTreeLinkedList::BinaryTreeLinkedList() //생성자
+{
+    printf("생성자\n");
+}
+
+BinaryTreeLinkedList::~BinaryTreeLinkedList() //소멸자
+{
+    printf("소멸자\n");
+}
+
+Node* BinaryTreeLinkedList::CreateNode() //노드 생성
+{
+    Node* newNode = new Node;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+bool BinaryTreeLinkedList::GetData(Node* node, int& data) //값 반환
+{
+    if (node == NULL)
+        return false;
+
+    data = node->data;
+    printf("GetData : %d\n", data);
+    return true;
+}
+
+bool BinaryTreeLinkedList::SetData(Node* node, int data) //값 지정
+{
+    if (node == NULL)
+        return false;
+
+    node->data = data;
+    printf("SetData : %d\n", node->data);
+    return true;
+}
+
+bool BinaryTreeLinkedList::GetLeftNode(Node* parent, Node** node) //노드의 왼쪽 자식 노드 반환
+{
+    if (parent == NULL || parent->left == NULL)
+    {
+        *node = NULL;
+        return false;
+    }
+
+    *node = parent->left;
+    printf("GetLeftNode : %d\n", (*node)->data);
+    return true;
+}
+
+bool BinaryTreeLinkedList::GetRightNode(Node* parent, Node** node) //노드의 오른쪽 자식 노드 반환
+{
+    if (parent == NULL || parent->right == NULL)
+    {
+        *node = NULL;
+        return false;
+    }
+
+    *node = parent->right;
+    printf("GetRightNode : %d\n", (*node)->data);
+    return true;
+}
+
+bool BinaryTreeLinkedList::SetLeftNode(Node* parent, Node* child) //노드의 왼쪽 자식 노드 지정
+{
+    if (parent == NULL || child == NULL)
+        return false;
+
+    if (parent->left != NULL)                //이미 왼쪽 자식노드가 있으면
+        RemoveNode(parent->left);            //왼쪽 자식노드를 지워준다.
+
+    parent->left = child;
+    printf("Set %d Node's LeftData : %d\n", parent->data, child->data);
+    return true;
+}
+
+bool BinaryTreeLinkedList::SetRightNode(Node* parent, Node* child) //노드의 오른쪽 자식 노드 지정
+{
+    if (parent == NULL || child == NULL)
+        return false;
+
+    if (parent->right != NULL)                //이미 오른쪽 자식노드가 있으면
+        RemoveNode(parent->right);            //오른쪽 자식 노드를 지워준다.
+
+    parent->right = child;
+    printf("Set %d Node's RightData : %d\n", parent->data, child->data);
+    return true;
+}
+
+void BinaryTreeLinkedList::PreorderPrint(Node* node) //전위 순회
+{
+    if (node == NULL)
+        return;
+
+    printf("Pre : %d\n", node->data);
+    PreorderPrint(node->left);
+    PreorderPrint(node->right);
+}
+
+void BinaryTreeLinkedList::InorderPrint(Node* node) //중위 순회
+{
+    if (node == NULL)
+        return;
+
+    InorderPrint(node->left);
+    printf("In : %d\n", node->data);
+    InorderPrint(node->right);
+}
+
+void BinaryTreeLinkedList::PostorderPrint(Node* node) //후위 순회
+{
+    if (node == NULL)
+        return;
+
+    PostorderPrint(node->left);
+    PostorderPrint(node->right);
+    printf("Post : %d\n", node->data);
+}
+
+void BinaryTreeLinkedList::RemoveNode(Node* node) //노드 제거
+{
+    if (node == NULL)
+        return;
+
+    RemoveNode(node->left);                    //지우는 방식은 후위 순회방식으로
+    RemoveNode(node->right);
+    printf("Delete : %d\n", node->data);
+    delete node;
+}
+
+//메인
+int main()
+{
+    BinaryTreeLinkedList* ListBinaryTree = new BinaryTreeLinkedList();
+
+    Node* tempANode = ListBinaryTree->CreateNode();
+    Node* tempBNode = ListBinaryTree->CreateNode();
+    Node* tempCNode = ListBinaryTree->CreateNode();
+    Node* tempDNode = ListBinaryTree->CreateNode();
+    Node* tempENode = ListBinaryTree->CreateNode();
+    Node* tempFNode; //임시로 데이터를 가져오기 위한 구조체 포인터
+
+    ListBinaryTree->SetData(tempANode, 1);
+    ListBinaryTree->SetData(tempBNode, 2);
+    ListBinaryTree->SetData(tempCNode, 3);
+    ListBinaryTree->SetData(tempDNode, 4);
+    ListBinaryTree->SetData(tempENode, 5);
+
+    printf("\n");
+    ListBinaryTree->SetLeftNode(tempANode, tempBNode);
+    ListBinaryTree->SetRightNode(tempANode, tempCNode);
+    ListBinaryTree->SetData(tempANode->left, 20);        //왼쪽 자식 노드 값 변경
+
+    printf("\n"); //.
+    ListBinaryTree->GetRightNode(tempANode, &tempFNode);    //오른쪽 자식 노드 가져와서
+    ListBinaryTree->SetData(tempFNode, 30);            //그 노드의 값 변경
+
+    printf("\n");
+    ListBinaryTree->GetLeftNode(tempANode, &tempFNode);
+    ListBinaryTree->SetLeftNode(tempFNode, tempDNode);
+    ListBinaryTree->SetRightNode(tempFNode, tempENode);
+
+    printf("\n");
+
+    int data; //임시로 데이터를 가져오기 위한 변수
+    ListBinaryTree->GetData(tempANode, data);
+    ListBinaryTree->GetData(tempBNode, data);
+    ListBinaryTree->GetData(tempCNode, data);
+    ListBinaryTree->GetData(tempDNode, data);
+    ListBinaryTree->GetData(tempENode, data);
+    ListBinaryTree->GetData(tempFNode, data);
+
+    printf("\n");
+    ListBinaryTree->PreorderPrint(tempANode);
+    printf("\n");
+    ListBinaryTree->InorderPrint(tempANode);
+    printf("\n");
+    ListBinaryTree->PostorderPrint(tempANode);
+
+    printf("\n");
+    ListBinaryTree->RemoveNode(tempANode);
+    delete ListBinaryTree;
+}
+```
+
