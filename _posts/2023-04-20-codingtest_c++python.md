@@ -1465,3 +1465,195 @@ int main() {
 }
 ```
 
+## 힙
+
+최대힙
+
+```c++
+#include <stdio.h>
+#define MAX_SIZE 100    // Heap 의 최대 원소 개수 
+ 
+typedef struct{    // Heap 의  노드 
+    int key;    // Heap 의 key
+    /* 여기에 데이터 추가 가능 ex) int data */ 
+}element;    
+ 
+typedef struct{    // Heap 자료구조 
+    element heap[MAX_SIZE];     
+    int size;
+}Heap;
+ 
+ 
+void max_heap_insert(Heap* h, element item){
+    int i;
+    i = ++(h->size);    // 마지막 위치(마지막 원소의 index+1) 
+    
+    /* 루트노드가 아니고, 삽입할 값이 적절한 위치를 찾을 때까지*/
+    while( (i != 1) && (item.key > h->heap[i/2].key) ){
+        h->heap[i] = h->heap[i/2];    // 자식 노드와 부모노드 교환 
+        i /= 2;    // 한 레벨 위로 올라감 
+    }
+    
+    h->heap[i] = item;    // 새로운 노드 삽입     
+}
+ 
+element max_heap_delete(Heap* h){
+    int parent, child;
+    element item, temp;
+    
+    item = h->heap[1];    // 반환할 노드 저장
+    temp = h->heap[(h->size)--];    // 마지막 노드 temp 에 저장, 사이즈 1감소
+    parent = 1;     
+    child = 2; 
+    
+    while(child <= h->size){
+        /* 왼쪽 자식 노드와 오른쪽 자식 노드 중 더 큰 자식 노드*/
+        if( (child < h->size) && ((h->heap[child].key) < h->heap[child+1].key )){
+            child++;    // 오른쪽 자식 노드 선택
+        }
+        
+        /* 마지막 노드가 자식 노드보다 크면 종료 */
+        if(temp.key >= h->heap[child].key){
+            break;
+        } 
+        
+        /* 부모노드와 자식노드 교환 */
+        h->heap[parent] = h->heap[child];
+        
+        /* 한 레벨 아래로 이동 */ 
+        parent = child;
+        child *= 2;
+    }
+    
+    /* 마지막 노드를 재설정한 위치에 삽입 */ 
+    h->heap[parent] = temp;
+    
+    /* 최댓값 노드 반환 */ 
+    return item;    
+    
+} 
+ 
+ 
+int main(){
+    Heap max_heap;
+    element item;
+    item.key = 9;
+    max_heap_insert(&max_heap, item);
+    item.key = 7;
+    max_heap_insert(&max_heap, item);
+    item.key = 6;
+    max_heap_insert(&max_heap, item);
+    item.key = 4;
+    max_heap_insert(&max_heap, item);
+    item.key = 5;
+    max_heap_insert(&max_heap, item);
+    item.key = 1;
+    max_heap_insert(&max_heap, item);
+    item.key = 3;
+    max_heap_insert(&max_heap, item);
+    item.key = 8;
+    max_heap_insert(&max_heap, item);
+    
+    while(max_heap.size > 0){
+        item = max_heap_delete(&max_heap);
+        printf("%d ", item.key);
+    }
+        
+    return 0;
+} 
+
+```
+
+## 그래프
+
+간선이 적으면 인접리스트
+
+간선이 많으면 인접행렬
+
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// 인접 리스트 : 실제 연결된 애들만 넣어줌.
+void CreateGraph_AdjacencyList()
+{
+    struct Vertex
+    {
+        int data;
+    };
+
+    vector<Vertex> v(6); // 정점 6개 생성.
+
+    //      0             1            2
+    // [vector<int>][vector<int>][vector<int>]...
+    vector<vector<int>> adjacent; // 2차원 배열.
+    adjacent.resize(6);
+
+    adjacent[0] = { 1, 3 }; // 0번 정점은 1, 3번 정점과 연결되어 있음.
+    adjacent[1] = { 0, 2, 3 }; // 1번 정점은 0, 2, 3번 정점과 연결되어 있음.
+    adjacent[3] = { 4 }; // 3번 정점은 4번 정점과 연결되어 있음.
+    adjacent[4] = { 5 }; // 4번 정점은 5번 정점과 연결되어 있음.
+
+    // Q) 0번->3번 연결되어 있나요?
+    bool connected = false;
+	
+    // 정점이 가지고 있는 값들을 하나씩 조사.
+    int size = adjacent[0].size();
+    for (int i = 0; i < size; i++)
+    {
+        int vertex = adjacent[0][i];
+        if (vertex == 3)
+            connected = true;
+    }
+}
+
+// 인접 행렬 : 메모리 소모 심하지만, 빠른 접근 가능.
+void CreateGraph_AdjacencyMatrix()
+{
+    struct Vertex
+    {
+        int data;
+    };
+
+    vector<Vertex> v(6);
+
+    // 연결된 목록을 행렬로 관리
+    // [X][O][X][O][X][X] 0 -> 1, 3
+    // [O][X][O][O][X][X] 1 -> 0, 2, 3
+    // [X][X][X][X][X][X] 2 -> x
+    // [X][X][X][X][O][X] 3 -> 4
+    // [X][X][X][X][X][X] 4 -> x
+    // [X][X][X][X][O][X] 5 -> 4
+
+    vector<bool> v(6, false);
+
+    vector<vector<bool>> adjacent(6, vector<bool>(6, false));
+    adjacent[0][1] = true;
+    adjacent[0][3] = true;
+
+    adjacent[1][0] = true;
+    adjacent[1][2] = true;
+    adjacent[1][3] = true;
+
+    adjacent[3][4] = true;
+    adjacent[5][4] = true;
+
+    // Q) 0번 -> 3번 연결되어 있나요?
+    // 정점을 인덱스로 사용하여 바로 접근 가능.
+    bool connected = adjacent[0][3];
+
+    // 가중치 그래프를 인접 행렬로 만들기. (정점간 연결되어 있지 않은 경우 = -1)
+    // 값을 가중치로 사용하면 됨.
+    vector<vector<int>> adjacent2 =
+    {
+        { -1, 15, -1, 35, -1, -1},
+        { 15, -1, 5, 10, -1, -1},
+        { -1, 5, -1, -1, -1, -1},
+        { 35, 10, -1, -1, 5, -1},
+        { -1, -1, -1, 5, -1, 5},
+        { -1, -1, -1, -1, 5, -1},
+    };
+}
+```
+
